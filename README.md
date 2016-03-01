@@ -44,8 +44,3 @@ We exchanged it for a token containing this:
 }
 </pre>
 
-## Notes
-
-The JWT Flow sample is currently in limbo based on this package being moved.
-The README will be updated with the exact instructions to run the sample
-once the move has been finished.

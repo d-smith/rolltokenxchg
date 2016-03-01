@@ -55,16 +55,17 @@ T9276oM42khyKY36lXvLi4yjk2yHysIvO7ckuX0F/vZtQjG1zuBb
 -----END RSA PRIVATE KEY-----
 `
 
-//Get the auth via the password grant flow as the dev portal app, e.g.
-//curl --data "client_id=5d130f17-2fe5-4462-4e9d-9b6eb2d806e8" --data scope=admin --data "grant_type=password" --data-urlencode "client_secret=0KizQCINnU0DtIkgwGs5ipc1AMt3WfUU1lNt6zTQTu4=" --data "username=portal-admin" --data "password=passw0rd" localhost:3000/oauth2/token
+//Get the auth via the password grant flow as the dev portal app, but use the subject who
+//owns the app, e.g.
+//curl --data "client_id=34e43f0a-87de-4793-52c9-bdd51824f05c"  --data "grant_type=password" --data-urlencode "client_secret=A0NjgL77lUjpDMQnTWsBilEBJv5saNIuHyMXN+KL10g=" --data "username=user" --data "password=passw0rd" localhost:3000/oauth2/token
 
 
 const (
-	clientID       = "fdec6cea-7b4d-47b9-5c7b-e0854a4e282e"
-	clientSecret   = "TKI07OmwWGGb0e+hg+giKaZvzzoS/nNpftHem9/90ds="
+	clientID       = "3d3ae096-6184-488d-4c92-f3e6e74a8ca6"
+	clientSecret   = "DnxGvVlmS0J8W3nk6nIv3g+ZIuLBHjEOxfsacqi2rNY="
 	baseJWTCertURL = "http://localhost:3000/v1/jwtflowcerts/"
 	tokenURL       = "http://localhost:3000/oauth2/token"
-	authToken      = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBsaWNhdGlvbiI6ImRldiBwb3J0YWwiLCJhdWQiOiI1ZDEzMGYxNy0yZmU1LTQ0NjItNGU5ZC05YjZlYjJkODA2ZTgiLCJleHAiOjE0NTY4NjE1MzQsImlhdCI6MTQ1Njc3NTEzNCwianRpIjoiYmQ4ZTU4NTAtNWFlNy00ZDM3LTc5YjAtMzUwN2I3YjM2MzVkIiwic2NvcGUiOiIiLCJzdWIiOiJwb3J0YWwtYWRtaW4ifQ.udeXc5um9zpAOpMexZ2avgyIGSm7rGvjiOGAYepuz03DKmM_uzxS8Mn3vO5UZ0xpqOL-pJNvZEabaIzwXg-JzC0fMjPpDtXrqCfq1HJLLUzx7UL5SDVDHPcITHcfeamEmqolox9f7Z6KIqNCm2nyFXUCOWYf-M7LPalFNKV6JAs"
+	authToken      = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBsaWNhdGlvbiI6ImRldiBwb3J0YWwiLCJhdWQiOiIzNGU0M2YwYS04N2RlLTQ3OTMtNTJjOS1iZGQ1MTgyNGYwNWMiLCJleHAiOjE0NTY5MjQ3OTEsImlhdCI6MTQ1NjgzODM5MSwianRpIjoiNDJjYmNiZDItZGQ5OS00NWVlLTcwMzYtNTM5ZjU5YjM1Y2FmIiwic2NvcGUiOiIiLCJzdWIiOiJ1c2VyIn0.no-7QKPf0XrrJiq44dWDHoirpxOR2N0mzvyrihxllv8TUix-vQdjao0fvHjzUA2X9rZWOcXmZC6zzJDlaF0kVO-mwSAa74btZI4oxsp4zRX_mtwwo5THsktAKcedzWezB-SrQqV-8NrNEjLbdl27rAydvAfc14bp9EV67fzyQws"
 )
 
 func main() {
@@ -74,7 +75,7 @@ func main() {
 		ClientSecret:   clientSecret,
 		CertPEM:        certPEM,
 	}
-	rolltokenxchg.UploadCert(rollCtx, authToken)
+	rolltokenxchg.UploadCert(rollCtx, clientID,clientID,authToken)
 	tokenString := rolltokenxchg.GenerateJWT(keyPEM, clientID)
 	fmt.Println("\nUse ", tokenString, " to obtain access token")
 	jwtResponse := rolltokenxchg.TradeTokenForToken(tokenString, tokenURL)

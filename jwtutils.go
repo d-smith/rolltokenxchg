@@ -19,13 +19,15 @@ type RollContext struct {
 	CertPEM        string
 }
 
-func UploadCert(rollCtx RollContext, authToken string) {
+func UploadCert(rollCtx RollContext, aud, iss, authToken string,) {
 	fmt.Println("Uploading cert to", rollCtx.BaseJWTCertURL+rollCtx.ClientID)
 	fmt.Println(rollCtx)
 
 	payload := rollhttp.CertPutCtx{
 		ClientSecret: rollCtx.ClientSecret,
 		CertPEM:      rollCtx.CertPEM,
+		CertIssuer:iss,
+		CertAudience:aud,
 	}
 
 	bodyReader := new(bytes.Buffer)
@@ -59,6 +61,7 @@ func GenerateJWT(keyPEM string, clientID string) string {
 	token.Claims["iss"] = clientID
 	token.Claims["sub"] = "foo"
 	token.Claims["scope"] = "admin"
+	token.Claims["aud"] = clientID
 
 	tokenString, err := token.SignedString(signKey)
 	if err != nil {
